@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beauty and Quality Makeup - Inicio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="particles"></div>
+    
+    <div class="container">
+        <header class="header">
+            <div class="logo-animated">
+                <span class="logo-icon">💄</span>
+                <h1>Beauty and Quality</h1>
+                <p class="tagline">✨ Tu Belleza, Nuestra Pasión ✨</p>
+            </div>
+        </header>
+        
+
+        <main class="main-content">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h2 class="hero-title">Descubre tu belleza interior</h2>
+                    <p class="hero-subtitle">El catálogo más exclusivo de maquillaje premium para resaltar tu esencia única</p>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-number">500+</span>
+                            <span class="stat-label">Productos</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">50+</span>
+                            <span class="stat-label">Marcas</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">10K+</span>
+                            <span class="stat-label">Clientes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cta-section">
+                <div class="cta-content">
+                    <h3>Comienza tu viaje de belleza</h3>
+                    <p>Únete a miles de personas que ya descubrieron su belleza con nosotros</p>
+                    <div class="button-group">
+                        <a href="{{ url_for('login') }}" class="btn btn-primary">
+                            <span>Iniciar Sesión</span>
+                            <span class="btn-icon">→</span>
+                        </a>
+                        <a href="{{ url_for('registro') }}" class="btn btn-secondary">
+                            <span>Crear Cuenta</span>
+                            <span class="btn-icon">✨</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="features-section">
+                <h3 class="section-title">¿Por qué elegirnos?</h3>
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon-wrapper">
+                            <span class="feature-icon">✨</span>
+                        </div>
+                        <h4>Calidad Premium</h4>
+                        <p>Solo trabajamos con las mejores marcas de maquillaje del mercado</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon-wrapper">
+                            <span class="feature-icon">💝</span>
+                        </div>
+                        <h4>Marcas Reconocidas</h4>
+                        <p>Productos auténticos de las marcas más prestigiosas</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon-wrapper">
+                            <span class="feature-icon">🌟</span>
+                        </div>
+                        <h4>Catálogo Exclusivo</h4>
+                        <p>Encuentra productos únicos que no verás en otros lugares</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon-wrapper">
+                            <span class="feature-icon">🎨</span>
+                        </div>
+                        <h4>Variedad Infinita</h4>
+                        <p>Desde maquillaje básico hasta productos profesionales</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon-wrapper">
+                            <span class="feature-icon">💄</span>
+                        </div>
+                        <h4>Tendencias Actuales</h4>
+                        <p>Siempre actualizados con las últimas novedades</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon-wrapper">
+                            <span class="feature-icon">🛍️</span>
+                        </div>
+                        <h4>Experiencia Única</h4>
+                        <p>Navegación fácil y experiencia de compra excepcional</p>
+                    </div>
+                </div>
+            </div>
+
+            
+
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Beauty and Quality Makeup</h4>
+                    <p>Tu destino para productos de belleza premium</p>
+                    <a href="https://www.instagram.com/sara._.makeup1/" target="_blank" class="instagram-link">
+                        📸 @sara._.makeup1
+                    </a>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces Rápidos</h4>
+                    <a href="{{ url_for('login') }}">Iniciar Sesión</a>
+                    <a href="{{ url_for('registro') }}">Registrarse</a>
+                </div>
+                
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Beauty and Quality Makeup. Todos los derechos reservados.</p>
+            </div>
+        </footer>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>

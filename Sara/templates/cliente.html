@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beauty and Quality Makeup - Catálogo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cliente.css') }}">
+
+</head>
+
+<body>
+    <header class="header">
+        <div class="container-header">
+            <div class="logo">
+                <span class="logo-icon">💄</span>
+                <h1>Beauty and Quality</h1>
+            </div>
+            <div class="header-actions">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Buscar productos..." />
+                    <span class="search-icon">🔍</span>
+                </div>
+                <div class="user-info">
+                    <span class="welcome">Hola, <strong>{{ nombre }}</strong>! 👋</span>
+                    <a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <div class="page-title">
+                    <h2>✨ Nuestro Catálogo Exclusivo ✨</h2>
+                    <p class="subtitle">Descubre los mejores productos de maquillaje</p>
+                    <div class="instagram-section">
+                        <p>Síguenos y contactanos en Instagram 💋</p>
+                        <a href="https://www.instagram.com/sara._.makeup1" target="_blank" class="instagram-link">
+                            <img src="{{ url_for('static', filename='images/instagram_icon.png') }}" alt="Instagram">
+                            @sara._.makeup1
+                        </a>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+            <div class="stats-banner">
+                <div class="stat-item">
+                    <span class="stat-icon">📦</span>
+                    <div>
+                        <strong id="totalProducts">{{ productos|length }}</strong>
+                        <span>Productos</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">💖</span>
+                    <div>
+                        <strong id="favoritesCount">0</strong>
+                        <span>Favoritos</span>
+                    </div>
+                </div>
+
+            </div>
+
+            {% if productos %}
+            <div class="productos-grid" id="productosGrid">
+                {% for producto in productos %}
+                <div class="producto-card" data-category="all">
+                    <div class="producto-badge">Nuevo</div>
+                    <div class="producto-imagen">
+                        <img src="{{ url_for('static', filename='images/' + producto.imagen) }}"
+                            alt="{{ producto.nombre }}"
+                            onerror="this.src='{{ url_for('static', filename='images/default.jpg') }}'">
+                        <div class="overlay">
+                            <span class="icon">✨</span>
+                            <p class="overlay-text">Ver detalles</p>
+                        </div>
+                    </div>
+                    <div class="producto-info">
+                        <h3 class="producto-nombre">{{ producto.nombre }}</h3>
+                        <p class="producto-descripcion">{{ producto.descripcion }}</p>
+                        <div class="producto-footer">
+                            <div class="precio-section">
+                                <span class="producto-precio">${{ "%.2f"|format(producto.precio) }}</span>
+                                <span class="precio-label">COP</span>
+                            </div>
+                            <button class="btn-favorito" title="Agregar a favoritos" data-id="{{ producto.id }}">
+                                <span class="heart">💖</span>
+                                <span class="text">Me gusta</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <span class="empty-icon">🛍️</span>
+                <h3>No hay productos disponibles</h3>
+                <p>Pronto tendremos productos increíbles para ti</p>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+
+    <script src="{{ url_for('static', filename='js/cliente.js') }}"></script>
+</body>
+
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beauty and Quality Makeup - Administrador</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container-header">
+            <div class="logo">
+                <span class="logo-icon">💄</span>
+                <h1>Beauty and Quality </h1>
+            </div>
+            <nav class="nav-menu">
+                <a href="{{ url_for('admin_catalogo') }}" class="nav-link">📋 Catálogo</a>
+                <a href="{{ url_for('admin') }}" class="nav-link active">⚙️ Gestionar</a>
+            </nav>
+            <div class="user-info">
+                <span class="welcome">👑 Admin: {{ nombre }}</span>
+                <a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <span class="alert-icon">{% if category == 'success' %}✓{% else %}⚠{% endif %}</span>
+                            <span>{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-info">
+                        <span class="stat-value">{{ productos|length }}</span>
+                        <span class="stat-label">Total Productos</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✨</div>
+                    <div class="stat-info">
+                        <span class="stat-value">{% if productos %}{{ productos|length }}{% else %}0{% endif %}</span>
+                        <span class="stat-label">En Catálogo</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-info">
+                        <span class="stat-value">${{ "%.2f"|format(productos|sum(attribute='precio') if productos else 0) }}</span>
+                        <span class="stat-label">Valor Total</span>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="admin-section">
+                <div class="section-header">
+                    <div>
+                        <h2>🛠️ Gestión de Productos</h2>
+                        <p class="section-subtitle">Administra tu catálogo de manera eficiente</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal('modalAgregar')">
+                        ➕ Agregar Producto
+                    </button>
+                </div>
+
+                <div class="productos-table">
+                    {% if productos %}
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Imagen</th>
+                                        <th>Nombre</th>
+                                        <th>Descripción</th>
+                                        <th>Precio</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for producto in productos %}
+                                        <tr class="table-row">
+                                            <td><span class="id-badge">{{ producto.id }}</span></td>
+                                            <td>
+                                                <img src="{{ url_for('static', filename='images/' + producto.imagen) }}" 
+                                                     alt="{{ producto.nombre }}"
+                                                     class="producto-miniatura"
+                                                     onerror="this.src='{{ url_for('static', filename='images/default.jpg') }}'">
+                                            </td>
+                                            <td class="nombre-col">{{ producto.nombre }}</td>
+                                            <td class="desc-col">{{ producto.descripcion }}</td>
+                                            <td class="precio-col">${{ "%.2f"|format(producto.precio) }}</td>
+                                            <td class="acciones-col">
+                                                <button class="btn-icon btn-edit" 
+                                                        onclick="openEditModal({{ producto.id }}, '{{ producto.nombre }}', '{{ producto.descripcion }}', {{ producto.precio }}, '{{ producto.imagen }}')"
+                                                        title="Editar">
+                                                    ✏️
+                                                </button>
+                                                <button class="btn-icon btn-delete" 
+                                                        onclick="confirmDelete({{ producto.id }}, '{{ producto.nombre }}')"
+                                                        title="Eliminar">
+                                                    🗑️
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <span class="empty-icon">📦</span>
+                            <h3>No hay productos registrados</h3>
+                            <p>Comienza agregando tu primer producto al catálogo</p>
+                            <button class="btn btn-primary" onclick="openModal('modalAgregar')">
+                                ➕ Agregar Primer Producto
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Agregar Producto -->
+    <div id="modalAgregar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ Agregar Nuevo Producto</h3>
+                <span class="close" onclick="closeModal('modalAgregar')">&times;</span>
+            </div>
+            <form method="POST" action="{{ url_for('agregar_producto') }}" enctype="multipart/form-data" id="formAgregar">
+                <div class="form-group">
+                    <label for="nombre">Nombre del Producto</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <textarea id="descripcion" name="descripcion" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input type="number" id="precio" name="precio" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="imagen">Imagen del Producto</label>
+                    <input type="file" id="imagen" name="imagen" accept="image/*">
+                    <small>Si no seleccionas una imagen, se usará una por defecto</small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modalAgregar')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Producto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Producto -->
+    <div id="modalEditar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✏️ Editar Producto</h3>
+                <span class="close" onclick="closeModal('modalEditar')">&times;</span>
+            </div>
+            <form method="POST" action="" enctype="multipart/form-data" id="formEditar">
+                <input type="hidden" id="edit_id" name="edit_id">
+                <div class="form-group">
+                    <label for="edit_nombre">Nombre del Producto</label>
+                    <input type="text" id="edit_nombre" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit_descripcion">Descripción</label>
+                    <textarea id="edit_descripcion" name="descripcion" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit_precio">Precio</label>
+                    <input type="number" id="edit_precio" name="precio" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit_imagen">Cambiar Imagen (opcional)</label>
+                    <input type="file" id="edit_imagen" name="imagen" accept="image/*">
+                    <small>Imagen actual: <span id="current_imagen"></span></small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modalEditar')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Actualizar Producto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Confirmar Eliminar -->
+    <div id="modalEliminar" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3>⚠️ Confirmar Eliminación</h3>
+                <span class="close" onclick="closeModal('modalEliminar')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar el producto <strong id="delete_nombre"></strong>?</p>
+                <p class="warning">Esta acción no se puede deshacer.</p>
+            </div>
+            <form method="POST" action="" id="formEliminar">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modalEliminar')">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

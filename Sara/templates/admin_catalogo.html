@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beauty and Quality Makeup - Catálogo Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_catalogo.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container-header">
+            <div class="logo">
+                <span class="logo-icon">💄</span>
+                <h1>Beauty and Quality</h1>
+            </div>
+            <nav class="nav-menu">
+                <a href="{{ url_for('admin_catalogo') }}" class="nav-link active">📋 Catálogo</a>
+                <a href="{{ url_for('admin') }}" class="nav-link">⚙️ Gestionar</a>
+            </nav>
+            <div class="user-info">
+                <span class="welcome">👑 Admin: {{ nombre }}</span>
+                <a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a>
+            </div>
+        </div>
+</header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-title">
+                <h2>✨ Catálogo Completo ✨</h2>
+                <p class="subtitle">Vista previa de todos los productos disponibles</p>
+            </div>
+
+            {% if productos %}
+                <div class="productos-grid">
+                    {% for producto in productos %}
+                        <div class="producto-card">
+                            <div class="producto-imagen">
+                                <img src="{{ url_for('static', filename='images/' + producto.imagen) }}" 
+                                     alt="{{ producto.nombre }}"
+                                     onerror="this.src='{{ url_for('static', filename='images/default.jpg') }}'">
+                                <div class="overlay">
+                                    <span class="icon">✨</span>
+                                </div>
+                                <div class="admin-badge">Admin View</div>
+                            </div>
+                            <div class="producto-info">
+                                <div class="producto-header">
+                                    <h3 class="producto-nombre">{{ producto.nombre }}</h3>
+                                    <span class="producto-id">ID: {{ producto.id }}</span>
+                                </div>
+                                <p class="producto-descripcion">{{ producto.descripcion }}</p>
+                                <div class="producto-footer">
+                                    <span class="producto-precio">${{ "%.2f"|format(producto.precio) }}</span>
+                                    <div class="producto-actions">
+                                        <button class="btn-quick-edit" 
+                                                onclick="window.location.href='{{ url_for('admin') }}';"
+                                                title="Ir a gestión">
+                                            ⚙️
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <span class="empty-icon">🛍️</span>
+                    <h3>No hay productos disponibles</h3>
+                    <p>Agrega productos desde el panel de gestión</p>
+                    <a href="{{ url_for('admin') }}" class="btn btn-primary">Ir a Gestión</a>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    
+    <script src="{{ url_for('static', filename='js/admin_catalogo.js') }}"></script>
+</body>
+</html>

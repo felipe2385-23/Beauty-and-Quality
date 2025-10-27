@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beauty and Quality Makeup - Iniciar Sesión</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-animation"></div>
+    
+    <div class="container">
+        <div class="login-box">
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+            
+            <a href="{{ url_for('index') }}" class="back-button">← Volver</a>
+            
+            <div class="logo">
+                <span class="logo-icon">💄</span>
+                <h1>Beauty and Quality</h1>
+                <p class="welcome-text">¡Bienvenida de nuevo!</p>
+            </div>
+            
+            <h2>Iniciar Sesión</h2>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <span class="alert-icon">{% if category == 'success' %}✓{% else %}⚠{% endif %}</span>
+                            <span>{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <form method="POST" action="{{ url_for('login') }}" id="loginForm">
+                <div class="form-group">
+                    <label for="correo">
+                        <span class="label-icon">📧</span>
+                        Correo Electrónico
+                    </label>
+                    <input type="email" id="correo" name="correo" required placeholder="tu@correo.com">
+                    <span class="error-message" id="correoError"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contrasena">
+                        <span class="label-icon">🔒</span>
+                        Contraseña
+                    </label>
+                    <div class="password-wrapper">
+                        <input type="password" id="contrasena" name="contrasena" required placeholder="Tu contraseña">
+                       <button type="button" class="toggle-password">👁️</button>
+
+                    </div>
+                    <span class="error-message" id="contrasenaError"></span>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <span>Entrar</span>
+                    <span class="btn-icon">→</span>
+                </button>
+            </form>
+            
+            <div class="divider">
+                <span>o</span>
+            </div>
+            
+            <div class="footer-links">
+                <p>¿No tienes cuenta? <a href="{{ url_for('registro') }}" class="link-primary">Regístrate aquí</a></p>
+                <p class="instagram-info">
+                    Síguenos en Instagram : 
+                    <a href="https://www.instagram.com/sara._.makeup1/" target="_blank" class="instagram-link">@sara._.makeup1</a>
+                </p>
+            </div>
+            
+            
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>
